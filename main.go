@@ -24,6 +24,7 @@ func main() {
 
 	app := gin.Default()
 
+	// TODO: add an update route
 	app.POST("/api/v1/category/", handlers.AddCategory)
 	app.DELETE("/api/v1/category/:ids", handlers.DeleteCategory)
 	app.GET("/api/v1/category/all", handlers.GetAllCategories)
