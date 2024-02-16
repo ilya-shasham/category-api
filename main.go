@@ -27,6 +27,7 @@ func main() {
 	// TODO: add an update route
 	app.POST("/api/v1/category/", handlers.AddCategory)
 	app.DELETE("/api/v1/category/:ids", handlers.DeleteCategory)
+	app.Handle("UPDATE", "/api/v1/category/:id/:name/:description/:subcategories", handlers.UpdateCategory)
 	app.GET("/api/v1/category/all", handlers.GetAllCategories)
 	app.GET("/api/v1/category/range/:from/:to", handlers.GetCategoriesRanged)
 	app.GET("/api/v1/category/prefix/:contains", handlers.GetCategoriesContaining)
