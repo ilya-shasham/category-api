@@ -17,6 +17,10 @@ func (r *postRequest) validate() error {
 		return errors.New("name cannot be empty")
 	}
 
+	if r.Description == "" {
+		return errors.New("description cannot be empty")
+	}
+
 	if len(r.SubCategories) > 255 {
 		return errors.New("too many subcategories. max is 255")
 	}
@@ -31,7 +35,7 @@ func (r *postRequest) validate() error {
 		}
 
 		if models.IsSubCategory(id) {
-			return fmt.Errorf("%d already a subcategory of something else", id)
+			return fmt.Errorf("%d already a child of another node", id)
 		}
 	}
 

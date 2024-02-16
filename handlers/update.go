@@ -21,12 +21,6 @@ func UpdateCategory(ctx *gin.Context) {
 	}
 
 	name, description := strings.ToLower(ctx.Param("name")), ctx.Param("description")
-
-	if name == "" {
-		helpers.Throw(errors.New("name cannot be empty"), ctx, helpers.ClientFault)
-		return
-	}
-
 	subcategories := []int{}
 
 	if err := json.Unmarshal([]byte(ctx.Param("subcategories")), &subcategories); err != nil {
@@ -34,7 +28,7 @@ func UpdateCategory(ctx *gin.Context) {
 		return
 	}
 
-	var category *models.Category
+	var category *models.Category = new(models.Category)
 
 	{
 		matches := models.GetCategories("id = ?", id)
@@ -47,7 +41,21 @@ func UpdateCategory(ctx *gin.Context) {
 		*category = matches[0]
 	}
 
-	category.Name, category.Description, category.SubCategories = name, description, helpers.UnsafeMarshal(subcategories)
+	if name != "" {
+		category.Name = name
+	}
+
+	if description != "" {
+		category.Description = description
+	}
+
+	if len(subcategories) != 0 {
+		if subcategories[0] != -1 {
+			category.SubCategories = helpers.UnsafeMarshal(subcategories)
+		}
+	} else {
+		category.SubCategories = helpers.UnsafeMarshal(subcategories)
+	}
 
 	globals.Db.Save(category)
 	helpers.Success(nil, ctx)
